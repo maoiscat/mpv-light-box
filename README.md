@@ -2,5 +2,4 @@
 White theme for mpv player
 
 [mpv.conf]
-
 ``osc=no
