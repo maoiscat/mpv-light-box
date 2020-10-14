@@ -1,7 +1,7 @@
 # mpv-light-box
 White theme for mpv player
 
-~~/mpv.cof
+drop the lua file in scripts folder and edit mpv.conf
 
 ```
 osc=no
