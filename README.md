@@ -6,3 +6,5 @@ White theme for mpv player
 ```
 osc=no
 ```
+
+![IMG](https://github.com/maoiscat/mpv-light-box/blob/main/preview.png)
