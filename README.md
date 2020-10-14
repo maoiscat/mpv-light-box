@@ -1,5 +1,6 @@
 # mpv-light-box
 White theme for mpv player
 
-[mpv.conf]
+mpv.conf
+
 ``osc=no
