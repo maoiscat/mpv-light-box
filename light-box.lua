@@ -70,9 +70,9 @@ local osc_param = { -- calculated by osc_init()
 }
 
 local osc_styles = {
-    s24Button = "{\\blur0\\bord0\\1c&H646464\\3c&HFFFFFF\\fs24\\fscy75\\fnmpv-osd-symbols}",
-    s16Button = "{\\blur0\\bord0\\1c&H646464\\3c&HFFFFFF\\fs16\\fn" .. user_opts.font .. "}",
-    cyButton = "{\\blur0\\bord0\\1c&H646464\\3c&HFFFFFF\\fs20\\fnmpv-osd-symbols}",
+    s24Button = "{\\blur0\\bord0\\1c&H5A5A5A\\3c&HFFFFFF\\fs24\\fscy75\\fnmpv-osd-symbols}",
+    s16Button = "{\\blur0\\bord0\\1c&H5A5A5A\\3c&HFFFFFF\\fs16\\fn" .. user_opts.font .. "}",
+    cyButton = "{\\blur0\\bord0\\1c&H5A5A5A\\3c&HFFFFFF\\fs20\\fnmpv-osd-symbols}",
     cyDigit = "{\\fn" .. user_opts.font .. "}",
     divA = "{\\blur0\\bord0\\1c&HC0C0C0\\3c&HFFFFFF\\fs16\\fnmpv-osd-symbols}",
     divB = "{\\blur0\\bord0\\1c&HC0C0C0\\3c&HFFFFFF\\fs16\\fnmpv-osd-symbols}",
