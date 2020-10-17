@@ -70,20 +70,19 @@ local osc_param = { -- calculated by osc_init()
 }
 
 local osc_styles = {
-    s24Button = "{\\blur0\\bord0\\1c&H5A5A5A\\3c&HFFFFFF\\fs24\\fscy75\\fnmpv-osd-symbols}",
-    s16Button = "{\\blur0\\bord0\\1c&H5A5A5A\\3c&HFFFFFF\\fs16\\fn" .. user_opts.font .. "}",
-    cyButton = "{\\blur0\\bord0\\1c&H5A5A5A\\3c&HFFFFFF\\fs20\\fnmpv-osd-symbols}",
-    cyDigit = "{\\fn" .. user_opts.font .. "}",
-    divA = "{\\blur0\\bord0\\1c&HC0C0C0\\3c&HFFFFFF\\fs16\\fnmpv-osd-symbols}",
-    divB = "{\\blur0\\bord0\\1c&HC0C0C0\\3c&HFFFFFF\\fs16\\fnmpv-osd-symbols}",
-    bgBox = "{\\blur2\\bord0.01\\1c&HF2F2F2\\3c&H202020}",	
-    fgSeekbar = "{\\blur0\\bord0\\1c&HC7A25A\\fs13}",
-    tpSeekbar = "{\\blur2\\bord1\\1c&HFFFFFF\\3c&H000000\\fs18}",
-    bgSeekbar = "{\\blur0\\bord0\\1c&HC0C0C0\\3c&HFFFFFF\\fs13\\q2}",
-
-    wcButtons = "{\\1c&H202020\\fs24\\fnmpv-osd-symbols}",
-    wcTitle = "{\\1c&H202020\\fs18\\q2}",
-    wcBar = "{\\1c&HHF2F2F2}",
+    sCtrl = "{\\blur0\\bord0\\1c&H5A5A5A\\3c&HFFFFFF\\fs24\\fscy75\\fnmpv-osd-symbols}",
+    sInfo = "{\\blur0\\bord0\\1c&H5A5A5A\\3c&HFFFFFF\\fs16\\fn" .. user_opts.font .. "}",
+    sCycIcon = "{\\blur0\\bord0\\1c&H5A5A5A\\3c&HFFFFFF\\fs20\\fnmpv-osd-symbols}",
+    sCycDig = "{\\blur0\\bord0\\1c&H5A5A5A\\3c&HFFFFFF\\fs16\\fn" .. user_opts.font .. "}",
+    sDiv1 = "{\\blur0\\bord0\\1c&HC0C0C0\\3c&HFFFFFF\\fs16\\fnmpv-osd-symbols}",
+    sBoxBg = "{\\blur2\\bord0.01\\1c&HF2F2F2\\3c&H202020}",	
+    sSeekbarFg = "{\\blur0\\bord0\\1c&HC7A25A\\fs13}",
+    sSeekbarBg = "{\\blur0\\bord0\\1c&HC0C0C0\\3c&HFFFFFF\\fs13\\q2}",
+    sTooltip = "{\\blur2\\bord1\\1c&HFFFFFF\\3c&H000000\\fs18}",
+    
+    sWCCtrl = "{\\1c&H202020\\fs24\\fnmpv-osd-symbols}",
+    sWCTitle = "{\\1c&H202020\\fs18\\q2}",
+    sWCBar = "{\\1c&HHF2F2F2}",
 	
     elementDown = "{\\1c&H999999}",
 }
@@ -1047,11 +1046,11 @@ function window_controls(topbar)
     local lo
 
     -- Background Bar
-    new_element("wcbar", "box")
-    lo = add_layout("wcbar")
+    new_element("sWCBar", "box")
+    lo = add_layout("sWCBar")
     lo.geometry = wc_geo
     lo.layer = 10
-    lo.style = osc_styles.wcBar
+    lo.style = osc_styles.sWCBar
     lo.alpha[1] = user_opts.boxalpha
 
     local button_y = wc_geo.y - (wc_geo.h / 2)
@@ -1075,7 +1074,7 @@ function window_controls(topbar)
         function () mp.commandv("quit") end
     lo = add_layout("close")
     lo.geometry = alignment == "left" and first_geo or third_geo
-    lo.style = osc_styles.wcButtons
+    lo.style = osc_styles.sWCCtrl
 
     -- Minimize: ??
     ne = new_element("minimize", "button")
@@ -1084,7 +1083,7 @@ function window_controls(topbar)
         function () mp.commandv("cycle", "window-minimized") end
     lo = add_layout("minimize")
     lo.geometry = alignment == "left" and second_geo or first_geo
-    lo.style = osc_styles.wcButtons
+    lo.style = osc_styles.sWCCtrl
 
     -- Maximize: ?? /??
     ne = new_element("maximize", "button")
@@ -1103,7 +1102,7 @@ function window_controls(topbar)
         end
     lo = add_layout("maximize")
     lo.geometry = alignment == "left" and third_geo or second_geo
-    lo.style = osc_styles.wcButtons
+    lo.style = osc_styles.sWCCtrl
 
     -- deadzone below window controls
     local sh_area_y0, sh_area_y1
@@ -1122,7 +1121,7 @@ function window_controls(topbar)
     end
 
     -- Window Title
-    ne = new_element("wctitle", "button")
+    ne = new_element("sWCTitle", "button")
     ne.content = function ()
     local title = mp.command_native({"expand-text", user_opts.title})
         -- escape ASS, and strip newlines and trailing slashes
@@ -1131,13 +1130,13 @@ function window_controls(topbar)
     end
     local left_pad = 5
     local right_pad = 10
-    lo = add_layout("wctitle")
+    lo = add_layout("sWCTitle")
     -- -3用来解决由于字体从24变为18后字体太靠下的问题
     lo.geometry =
         { x = titlebox_left + left_pad, y = wc_geo.y - 3 -3, an = 1,
           w = titlebox_w, h = wc_geo.h }
     lo.style = string.format("%s{\\clip(%f,%f,%f,%f)}",
-        osc_styles.wcTitle,
+        osc_styles.sWCTitle,
         titlebox_left + left_pad, wc_geo.y - wc_geo.h,
         titlebox_right - right_pad , wc_geo.y + wc_geo.h)
 
@@ -1208,12 +1207,12 @@ layouts["default"] = function ()
     -- Background box
     --
 
-    new_element("bgbox", "box")
-    lo = add_layout("bgbox")
+    new_element("sBoxBg", "box")
+    lo = add_layout("sBoxBg")
 
     lo.geometry = {x = posX, y = posY, an = 5, w = osc_w, h = osc_h}
     lo.layer = 10
-    lo.style = osc_styles.bgBox
+    lo.style = osc_styles.sBoxBg
     lo.alpha[1] = user_opts.boxalpha
     lo.alpha[3] = user_opts.boxalpha
     lo.box.radius = osc_r
@@ -1233,7 +1232,7 @@ layouts["default"] = function ()
     lo = add_layout("bgbar1")
     lo.geometry = geo
     lo.layer = 13
-    lo.style = osc_styles.bgSeekbar
+    lo.style = osc_styles.sSeekbarBg
     lo.alpha[1] = math.min(255, user_opts.boxalpha + (255 - user_opts.boxalpha)*0.05)
     if not (user_opts["seekbarstyle"] == "bar") then
 		geo.h = 4
@@ -1243,81 +1242,80 @@ layouts["default"] = function ()
 	geo ={x = refX + osc_geo.w/2 , y = refY + 14 , an = 5, w = osc_geo.w - 40, h = 12}
     lo = add_layout("seekbar")
     lo.geometry = geo
-	lo.style = osc_styles.fgSeekbar
+	lo.style = osc_styles.sSeekbarFg
     lo.slider.border = 0
     lo.slider.gap = 0
     if not (user_opts["seekbarstyle"] == "bar") then
 		geo.w = geo.w + 8
 		lo.slider.gap = 4
     end
-    lo.slider.tooltip_style = osc_styles.tpSeekbar
+    lo.slider.tooltip_style = osc_styles.sTooltip
     lo.slider.tooltip_an = 2
     lo.slider.stype = user_opts["seekbarstyle"]
     lo.slider.rtype = user_opts["seekrangestyle"]
     
-	-- seekbar-control dividor
-	--geo ={x = refX + osc_geo.w / 2 , y = refY + 28 , an = 5, w = osc_geo.w - 20, h = 1}
-    --new_element("bgbar2", "box")
-    --lo = add_layout("bgbar2")
-    --lo.geometry = geo
-    --lo.layer = 13
-    --lo.style = osc_styles.divA
-    --lo.alpha[1] = math.min(255, user_opts.boxalpha + (255 - user_opts.boxalpha)*0.05)
-
 	-- buttons
     lo = add_layout("playpause")
     lo.geometry = {x = refX + 24, y = refY + 47 , an = 5, w = 26, h = 30}
-    lo.style = osc_styles.s24Button
+    lo.style = osc_styles.sCtrl
 
 	lo = add_layout("skipback")
     lo.geometry = {x = refX + 48, y = refY + 47 , an = 5, w = 26, h = 30}
-    lo.style = osc_styles.s24Button	
+    lo.style = osc_styles.sCtrl	
 
 			
     lo = add_layout("skipfrwd")
     lo.geometry = {x = refX + 72, y = refY + 47 , an = 5, w = 26, h = 30}
-    lo.style = osc_styles.s24Button	
+    lo.style = osc_styles.sCtrl	
 
     lo = add_layout("pl_prev")
     lo.geometry = {x = refX + 96, y = refY + 47 , an = 5, w = 26, h = 30}
-    lo.style = osc_styles.s24Button		
+    lo.style = osc_styles.sCtrl		
 
     lo = add_layout("pl_next")
     lo.geometry = {x = refX + 120, y = refY + 47 , an = 5, w = 26, h = 30}
-    lo.style = osc_styles.s24Button	
+    lo.style = osc_styles.sCtrl	
 
 
 	-- Time
     lo = add_layout("tc_left")
-    lo.geometry = {x = refX + 182, y = refY + 47, an = 5, w = 110, h = 20}
-    lo.style = osc_styles.s16Button	
+    lo.geometry = {x = refX + 214, y = refY + 47, an = 6, w = 64, h = 20}
+    lo.style = osc_styles.sInfo	
 	
-	geo ={x = refX + 224 , y = refY + 47, an = 5, w = 2, h = 11}
+	geo ={x = refX + 224 , y = refY + 47, an = 5, w = 1, h = 11}
 	new_element("bgbar3", "box")
     lo = add_layout("bgbar3")
     lo.geometry = geo
     lo.layer = 13
-    lo.style = osc_styles.divB
+    lo.style = osc_styles.sDiv1
     lo.alpha[1] = math.min(255, user_opts.boxalpha + (255 - user_opts.boxalpha)*0.05)
 		
     lo = add_layout("tc_right")
-    lo.geometry = {x = refX + 266 , y = refY + 47, an = 5, w = 64, h = 20}
-    lo.style = osc_styles.s16Button	
+    lo.geometry = {x = refX + 234 , y = refY + 47, an = 4, w = 64, h = 20}
+    lo.style = osc_styles.sInfo	
 
 	
 	-- Media title
 	lo = add_layout("title")
     lo.geometry = {x = refX + 310  , y = refY + 47 , an = 4, w = 370, h = 20}
-    lo.style = osc_styles.s16Button	
+    lo.style = osc_styles.sInfo	
     lo.button.maxchars = user_opts.boxmaxchars
+    
+    lo = add_layout("cy_audio_icon")
+	lo.geometry = {x = refX + osc_geo.w - 135, y = refY + 46, an = 6, w = 24, h = 34}
+    lo.style = osc_styles.sCycIcon	
+	
+	lo = add_layout("cy_audio")
+    lo.geometry = {x = refX + osc_geo.w - 130, y = refY + 47, an = 4, w = 24, h = 24}
+    lo.style = osc_styles.sCycDig	
 
-    lo = add_layout("cy_audio")
-    lo.geometry = {x = refX + osc_geo.w - 135, y = refY + 47, an = 4, w = 64, h = 30}
-    lo.style = osc_styles.cyButton	
-
+    lo = add_layout("cy_sub_icon")
+    lo.geometry = {x = refX + osc_geo.w - 70, y = refY + 46, an = 6, w = 24, h = 24}
+    lo.style = osc_styles.sCycIcon
+    
     lo = add_layout("cy_sub")
-    lo.geometry = {x = refX + osc_geo.w - 70, y = refY + 47, an = 4, w = 64, h = 30}
-    lo.style = osc_styles.cyButton
+    lo.geometry = {x = refX + osc_geo.w - 65, y = refY + 47, an = 4, w = 24, h = 24}
+    lo.style = osc_styles.sCycDig
 
 end
 
@@ -1495,10 +1493,12 @@ function osc_init()
     ne.content = "\238\128\132"
     ne.eventresponder["mbtn_left_down"] =
         function () mp.command("seek -5") end
+        --function () mp.commandv("seek", -5, "relative", "keyframes") end
     ne.eventresponder["shift+mbtn_left_down"] =
         function () mp.commandv("frame-back-step") end
     ne.eventresponder["mbtn_right_down"] =
         function () mp.command("seek -60") end
+        --function () mp.commandv("seek", -30, "relative", "keyframes") end
 
     --skipfrwd
     ne = new_element("skipfrwd", "button")
@@ -1506,11 +1506,13 @@ function osc_init()
     ne.softrepeat = true
     ne.content = "\238\128\133"
     ne.eventresponder["mbtn_left_down"] =
-        function () mp.command("seek +5") end
+        function () mp.command("seek 5") end
+        --function () mp.commandv("seek", 10, "relative", "keyframes") end
     ne.eventresponder["shift+mbtn_left_down"] =
         function () mp.commandv("frame-step") end
     ne.eventresponder["mbtn_right_down"] =
-        function () mp.command("seek +60") end
+        function () mp.command("seek 60") end
+        --function () mp.commandv("seek", 60, "relative", "keyframes") end
 
     --ch_prev
     ne = new_element("ch_prev", "button")
@@ -1544,18 +1546,27 @@ function osc_init()
 
     --
     update_tracklist()
-
+    
+	--cy_audio_icon
+    ne = new_element("cy_audio_icon", "button")
+    ne.enabled = (#tracks_osc.audio > 0)
+    ne.content = "\238\132\134"
+    ne.eventresponder["mbtn_left_up"] =
+        function () set_track("audio", 1) end
+    ne.eventresponder["mbtn_right_up"] =
+        function () set_track("audio", -1) end
+    ne.eventresponder["shift+mbtn_left_down"] =
+        function () show_message(get_tracklist("audio"), 2) end
+        
     --cy_audio
     ne = new_element("cy_audio", "button")
-
     ne.enabled = (#tracks_osc.audio > 0)
     ne.content = function ()
         local aid = "–"
         if not (get_track("audio") == 0) then
             aid = get_track("audio")
         end
-        return ("\238\132\134" .. osc_styles.cyDigit
-            .. " " .. aid .. "∕" .. #tracks_osc.audio)
+        return (aid .. "∕" .. #tracks_osc.audio)
     end
     ne.eventresponder["mbtn_left_up"] =
         function () set_track("audio", 1) end
@@ -1563,6 +1574,18 @@ function osc_init()
         function () set_track("audio", -1) end
     ne.eventresponder["shift+mbtn_left_down"] =
         function () show_message(get_tracklist("audio"), 2) end
+
+    --cy_sub_icon
+    ne = new_element("cy_sub_icon", "button")
+
+    ne.enabled = (#tracks_osc.sub > 0)
+    ne.content = "\238\132\135"
+    ne.eventresponder["mbtn_left_up"] =
+        function () set_track("sub", 1) end
+    ne.eventresponder["mbtn_right_up"] =
+        function () set_track("sub", -1) end
+    ne.eventresponder["shift+mbtn_left_down"] =
+        function () show_message(get_tracklist("sub"), 2) end
 
     --cy_sub
     ne = new_element("cy_sub", "button")
@@ -1573,8 +1596,7 @@ function osc_init()
         if not (get_track("sub") == 0) then
             sid = get_track("sub")
         end
-        return ("\238\132\135" .. osc_styles.cyDigit
-            .. " " .. sid .. "∕" .. #tracks_osc.sub)
+        return (sid .. "∕" .. #tracks_osc.sub)
     end
     ne.eventresponder["mbtn_left_up"] =
         function () set_track("sub", 1) end
