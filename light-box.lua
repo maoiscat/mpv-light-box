@@ -1,6 +1,6 @@
 -- by maoiscat
 -- email:valarmor@163.com
--- https://github.com/maoiscat/mpv-light-box
+-- https://github.com/maoiscat/mpv-light-box/
 
 local assdraw = require 'mp.assdraw'
 local msg = require 'mp.msg'
@@ -37,10 +37,10 @@ local user_opts = {
 	font = "mpv-osd-symbols",	-- default osc font
     layout = "default",			-- default only!!
     seekbarstyle = "knob",      -- bar, diamond or knob
-    seekbarhandlesize = 3,	-- size ratio of the diamond and knob handle
+    seekbarhandlesize = 1,		-- size ratio of the diamond and knob handle
     seekrangestyle = "bar",		-- bar, line, slider, inverted or none
     seekrangeseparate = true,   -- wether the seekranges overlay on the bar-style seekbar
-    seekrangealpha = 200,       -- transparency of seekranges
+    seekrangealpha = 160,       -- transparency of seekranges
     seekbarkeyframes = true,    -- use keyframes when dragging the seekbar
     title = "　${media-title}",   -- string compatible with property-expansion
                                 -- to be shown as OSC title
@@ -647,7 +647,7 @@ function render_elements(master_ass)
             local seekRangeLineHeight = innerH / 5
 
             if slider_lo.stype ~= "bar" then
-                foH = elem_geo.h * user_opts.seekbarhandlesize / 2 - (slider_lo.border + slider_lo.gap) * user_opts.seekbarhandlesize
+                foH = elem_geo.h / 2
             else
                 foH = slider_lo.border + slider_lo.gap
             end
@@ -657,9 +657,9 @@ function render_elements(master_ass)
 
                 if slider_lo.stype ~= "bar" then
                     local r = innerH / 2							-- Bar radius
-                    local rh = r * user_opts.seekbarhandlesize		-- Handle radius
-                    s_min = s_min + slider_lo.border + slider_lo.gap
-                    s_max = s_max - slider_lo.border - slider_lo.gap
+                    local rh = foH * user_opts.seekbarhandlesize	-- Handle radius
+                    s_min = s_min + foV
+                    s_max = s_max - foV
                     ass_draw_rr_h_cw(elem_ass, xp - rh, foH - rh,
                                      xp + rh, foH + rh,
                                      rh, slider_lo.stype == "diamond")
@@ -742,8 +742,8 @@ function render_elements(master_ass)
                         end
                     elseif slider_lo.rtype == "inverted" then
                         if slider_lo.stype ~= "bar" then
-                            ass_draw_rr_h_ccw(elem_ass, pstart, (elem_geo.h*user_opts.seekbarhandlesize / 2) - 1, pend,
-                                              (elem_geo.h*user_opts.seekbarhandlesize / 2) + 1,
+                            ass_draw_rr_h_ccw(elem_ass, pstart, (elem_geo.h / 2) - 1, pend,
+                                              (elem_geo.h/ 2) + 1,
                                               1, slider_lo.stype == "diamond")
                         else
                             elem_ass:rect_ccw(pstart, (elem_geo.h / 2) - 1, pend, (elem_geo.h / 2) + 1)
@@ -1246,8 +1246,9 @@ layouts["default"] = function ()
     lo.slider.border = 0
     lo.slider.gap = 0
     if not (user_opts["seekbarstyle"] == "bar") then
-		geo.w = geo.w + 8
-		lo.slider.gap = 4
+		geo.h = 16
+		geo.w = geo.w + 12
+		lo.slider.gap = 6
     end
     lo.slider.tooltip_style = osc_styles.sTooltip
     lo.slider.tooltip_an = 2
@@ -1302,19 +1303,19 @@ layouts["default"] = function ()
     lo.button.maxchars = user_opts.boxmaxchars
     
     lo = add_layout("cy_audio_icon")
-	lo.geometry = {x = refX + osc_geo.w - 135, y = refY + 46, an = 6, w = 24, h = 34}
+	lo.geometry = {x = refX + osc_geo.w - 125, y = refY + 46, an = 6, w = 24, h = 34}
     lo.style = osc_styles.sCycIcon	
 	
 	lo = add_layout("cy_audio")
-    lo.geometry = {x = refX + osc_geo.w - 130, y = refY + 47, an = 4, w = 24, h = 24}
+    lo.geometry = {x = refX + osc_geo.w - 120, y = refY + 47, an = 4, w = 24, h = 24}
     lo.style = osc_styles.sCycDig	
 
     lo = add_layout("cy_sub_icon")
-    lo.geometry = {x = refX + osc_geo.w - 70, y = refY + 46, an = 6, w = 24, h = 24}
+    lo.geometry = {x = refX + osc_geo.w - 60, y = refY + 46, an = 6, w = 24, h = 24}
     lo.style = osc_styles.sCycIcon
     
     lo = add_layout("cy_sub")
-    lo.geometry = {x = refX + osc_geo.w - 65, y = refY + 47, an = 4, w = 24, h = 24}
+    lo.geometry = {x = refX + osc_geo.w - 55, y = refY + 47, an = 4, w = 24, h = 24}
     lo.style = osc_styles.sCycDig
 
 end
